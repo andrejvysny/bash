@@ -9,7 +9,7 @@ SNAP_APPS=(
     vlc
  )
 
-APT_APPS="curl wget git telegram-desktop openvpn build-essential "
+APT_APPS="wget git telegram-desktop htop openvpn build-essential "
 
 SSH_PRIVATE_KEY_FILE="/home/$USER/.ssh/id_rsa"
 SSH_TYPE="rsa"
