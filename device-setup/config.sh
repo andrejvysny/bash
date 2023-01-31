@@ -5,6 +5,7 @@ SNAP_APPS=(
     "clion --classic"
     "code --classic"
     slack
+    discord
     spotify
     vlc
  )
