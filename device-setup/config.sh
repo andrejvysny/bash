@@ -15,3 +15,5 @@ SSH_PRIVATE_KEY_FILE="/home/$USER/.ssh/id_rsa"
 SSH_TYPE="rsa"
 
 GITHUB_ACCESS_TOKEN=""
+GITHUB_USER="andrejvysny"
+GIT_NAME="Andrej Vyšný"
