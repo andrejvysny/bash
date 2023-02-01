@@ -2,8 +2,8 @@
 
 [ -f "./config.sh" ] && source config.sh || source https://raw.githubusercontent.com/andrejvysny/bash/main/device-setup/config.sh
 
-source https://raw.githubusercontent.com/andrejvysny/bash/main/core/colors.sh
-source https://raw.githubusercontent.com/andrejvysny/bash/main/core/asRoot.sh
+source https://raw.githubusercontent.com/andrejvysny/bash/main/scripts/colors.sh
+source https://raw.githubusercontent.com/andrejvysny/bash/main/scripts/asRoot.sh
 
 # Starting Script
 apt update
