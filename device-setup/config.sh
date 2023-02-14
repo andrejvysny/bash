@@ -2,6 +2,7 @@
 
 SNAP_APPS=( 
     "phpstorm --classic"
+    "intellij-idea-ultimate --classic"
     "clion --classic"
     "code --classic"
     slack
