@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo apt update
+sudo apt upgrade
+sudo apt install htop curl wget
 # Create user
 username="andrejvysny"
 sudo adduser --shell /bin/bash $username
