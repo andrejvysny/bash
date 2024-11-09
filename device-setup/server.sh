@@ -2,7 +2,7 @@
 
 apt update
 apt upgrade -y
-apt install htop curl wget -y
+apt install htop nano curl wget -y
 
 # Bash aliases
 
