@@ -8,13 +8,9 @@ set -eu
 
 DEFAULT_WORKSPACE_DIR="$HOME/genboard"
 
-# If stdin is a terminal, prompt the user; otherwise use defaults (safe for curl | sh)
-if [ -t 0 ]; then
-    printf 'Enter workspace directory location [%s]: ' "$DEFAULT_WORKSPACE_DIR"
-    if ! read WORKSPACE_DIR; then
-        WORKSPACE_DIR=
-    fi
-else
+# Always prompt the user for workspace directory location, even when running non-interactively
+printf 'Enter workspace directory location [%s]: ' "$DEFAULT_WORKSPACE_DIR"
+if ! read WORKSPACE_DIR; then
     WORKSPACE_DIR=
 fi
 
@@ -24,14 +20,12 @@ printf 'Workspace will be set up at: %s\n' "$WORKSPACE_DIR"
 
 # Ask user if they want to set up an alias for devstack (interactive only)
 SET_ALIAS="n"
-if [ -t 0 ]; then
-    printf '\nDo you want to set up an alias \''devstack\'' for easier startup of development containers? [y/N]: '
-    if read ANS; then
-        case "$ANS" in
-            [Yy]* ) SET_ALIAS="y" ;;
-            * ) SET_ALIAS="n" ;;
-        esac
-    fi
+printf '\nDo you want to set up an alias '\''devstack'\'' for easier startup of development containers? [y/N]: '
+if read ANS; then
+    case "$ANS" in
+        [Yy]* ) SET_ALIAS="y" ;;
+        * ) SET_ALIAS="n" ;;
+    esac
 fi
 
 if [ "$SET_ALIAS" = "y" ]; then
