@@ -7,7 +7,7 @@ DEFAULT_WORKSPACE_DIR="$HOME/genboard"
 read -p "Enter workspace directory location [$DEFAULT_WORKSPACE_DIR]: " WORKSPACE_DIR
 WORKSPACE_DIR="${WORKSPACE_DIR:-$DEFAULT_WORKSPACE_DIR}"
 
-echo "Workspace will be set up at: $WORKSPACE_DIR"
+echo "Workspace will be set up at: ${WORKSPACE_DIR}"
 
 # Ask user if they want to set up an alias for devstack
 read -p $'\nDo you want to set up an alias \'devstack\' to run this script? [y/N]: ' SET_ALIAS
@@ -51,26 +51,31 @@ fi
 # Navigate to the devstack directory
 cd devstack || { echo "Failed to change directory to $WORKSPACE_DIR/devstack
 "; exit 1; }
-# Start the Docker containers
-docker compose -f compose.yml up -d --build
-echo "Development environment setup complete. Navigate to $WORKSPACE_DIR and start coding!"
-echo -e "\nTo start the devstack in the future, simply run 'devstack up -d' from your terminal.\n"
+
+echo "\n\nDevelopment environment setup complete. Navigate to $WORKSPACE_DIR and start coding!"
+echo "\nTo start the devstack in the future, simply run 'devstack up -d' from your terminal.\n"
 
 
-echo "Running initial setup for backend and frontend..."
+echo "Running initial setup for backend and frontend...\n\n\n"
+
+
 # Backend setup
 docker compose -f compose.yml run --rm backend composer install
+
+docker compose -f compose.yml up -d database
+
 docker compose -f compose.yml run --rm backend bin/console doctrine:database:create --if-not-exists
 docker compose -f compose.yml run --rm backend bin/console doctrine:migrations:migrate --no-interaction
 docker compose -f compose.yml run --rm backend bin/console doctrine:fixtures:load --no-interaction
 
-# Frontend setup
-docker compose -f compose.yml run --rm frontend npm install
 
-echo -e "\nInitial setup for backend and frontend completed."
+echo "\nInitial setup for backend and frontend completed."
 
-echo -e "\nYou can now access the following services:"
+# Start the Docker containers
+docker compose -f compose.yml up -d --build
+
+echo "\n\n\nYou can now access the following services:"
 echo "Backend: http://localhost:80"
 echo "Frontend: http://localhost:3000"
 echo "Database available at: localhost:5432 (user: user, password: password, db: app)"
-echo -e "\nHappy coding!"
+echo "\n\nHappy coding!"
