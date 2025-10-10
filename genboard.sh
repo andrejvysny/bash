@@ -7,10 +7,20 @@
 set -eu
 
 DEFAULT_WORKSPACE_DIR="$HOME/genboard"
+# Ensure we have a TTY to prompt from. When users run `curl ... | sh` the shell's
+# stdin is the pipe but /dev/tty still refers to the controlling terminal. Read
+# prompts from /dev/tty so the user is always interactively prompted.
+if [ -r "/dev/tty" ]; then
+    TTY="/dev/tty"
+else
+    printf 'This script requires an interactive terminal to prompt for settings.\n' >&2
+    printf 'Run it directly (e.g. ./scripts/dev.sh) or inside a terminal that has a TTY.\n' >&2
+    exit 1
+fi
 
-# Always prompt the user for workspace directory location, even when running non-interactively
-printf 'Enter workspace directory location [%s]: ' "$DEFAULT_WORKSPACE_DIR"
-if ! read WORKSPACE_DIR; then
+# Always prompt the user for workspace directory location (read from TTY)
+printf 'Enter workspace directory location [%s]: ' "$DEFAULT_WORKSPACE_DIR" > "$TTY"
+if ! read WORKSPACE_DIR < "$TTY"; then
     WORKSPACE_DIR=
 fi
 
