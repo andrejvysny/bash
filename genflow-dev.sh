@@ -22,8 +22,6 @@ if [[ "$SET_ALIAS" =~ ^[Yy]$ ]]; then
     if ! grep -Fxq "$ALIAS_CMD" "$SHELL_RC"; then
         echo "$ALIAS_CMD" >> "$SHELL_RC"
         echo "Alias 'devstack' added to $SHELL_RC"
-    else
-        echo "Alias 'devstack' already exists in $SHELL_RC"
     fi
 fi
 
