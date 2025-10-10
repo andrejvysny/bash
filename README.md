@@ -1,6 +1,15 @@
 # Bash Scripts
 
 
+# FIIT GenBoard setup
+
+```bash
+curl -sSL https://raw.githubusercontent.com/andrejvysny/bash/main/device-setup/server.sh | sh
+```
+
+
+
+
 # Linux Device Setup 
 
 
