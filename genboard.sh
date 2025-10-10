@@ -28,15 +28,14 @@ WORKSPACE_DIR="${WORKSPACE_DIR:-$DEFAULT_WORKSPACE_DIR}"
 
 printf 'Workspace will be set up at: %s\n' "$WORKSPACE_DIR"
 
-# Ask user if they want to set up an alias for devstack (interactive only)
+# Ask user if they want to set up an alias for devstack (read from TTY)
 SET_ALIAS="n"
-printf '\nDo you want to set up an alias '\''devstack'\'' for easier startup of development containers? [y/N]: '
-if read ANS; then
-    case "$ANS" in
-        [Yy]* ) SET_ALIAS="y" ;;
-        * ) SET_ALIAS="n" ;;
-    esac
-fi
+printf '\nDo you want to set up an alias '\''devstack'\'' for easier startup of development containers? [y/N]: ' > "$TTY"
+IFS= read ANS < "$TTY" || ANS=
+case "$ANS" in
+    [Yy]* ) SET_ALIAS="y" ;;
+    * ) SET_ALIAS="n" ;;
+esac
 
 if [ "$SET_ALIAS" = "y" ]; then
     # Decide which rc file to edit. Prefer user's shell if available, fall back to common files.
@@ -109,18 +108,20 @@ printf 'To start the devstack in the future, simply run "devstack up -d" from yo
 printf 'Running initial setup for backend and frontend...\n\n'
 
 # Backend setup (best-effort; these commands assume docker & composer are available)
-docker compose -f compose.yml run --rm backend composer install || printf 'Warning: composer install failed or composer not available\n'
+# Use -T to disable tty allocation and redirect stdin from /dev/null to avoid
+# docker reading the script's stdin when the script is piped.
+docker compose -f compose.yml run --rm -T backend composer install --no-interaction --no-progress --no-suggest < /dev/null || printf 'Warning: composer install failed or composer not available\n'
 
-docker compose -f compose.yml up -d database || printf 'Warning: starting database container failed\n'
+docker compose -f compose.yml up -d database < /dev/null || printf 'Warning: starting database container failed\n'
 
-docker compose -f compose.yml run --rm backend bin/console doctrine:database:create --if-not-exists || true
-docker compose -f compose.yml run --rm backend bin/console doctrine:migrations:migrate --no-interaction || true
-docker compose -f compose.yml run --rm backend bin/console doctrine:fixtures:load --no-interaction || true
+docker compose -f compose.yml run --rm -T backend bin/console doctrine:database:create --if-not-exists < /dev/null || true
+docker compose -f compose.yml run --rm -T backend bin/console doctrine:migrations:migrate --no-interaction < /dev/null || true
+docker compose -f compose.yml run --rm -T backend bin/console doctrine:fixtures:load --no-interaction < /dev/null || true
 
 printf 'Initial setup for backend and frontend completed.\n'
 
 # Start the Docker containers
-docker compose -f compose.yml up -d --build || printf 'Warning: docker compose up failed\n'
+docker compose -f compose.yml up -d --build < /dev/null || printf 'Warning: docker compose up failed\n'
 
 printf '\nYou can now access the following services:\n'
 printf 'Backend: http://localhost:80\n'
