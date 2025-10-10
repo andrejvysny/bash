@@ -4,7 +4,7 @@
 # FIIT GenBoard setup
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/andrejvysny/bash/main/device-setup/server.sh | sh
+curl -sSL https://raw.githubusercontent.com/andrejvysny/bash/refs/heads/main/genflow-dev.sh | sh
 ```
 
 
